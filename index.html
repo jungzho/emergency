@@ -7,52 +7,65 @@
     <style>
         body {
             font-family: -apple-system, system-ui, sans-serif;
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh; margin: 0; background: #f1f1f1; color: #333;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; margin: 0; background: #f1f1f1; color: #333;
+            padding: 40px 0; /* 상하 여백 추가 */
         }
         .box {
-            background: #fff; padding: 40px 24px; border-radius: 24px;
+            background: #fff; padding: 30px 24px; border-radius: 24px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.08);
             text-align: center; max-width: 340px; width: 85%;
+            margin-bottom: 20px;
         }
         h1 { font-size: 20px; margin: 0 0 12px; color: #dc143c; }
+        h2 { font-size: 17px; margin: 0 0 20px 0; color: #333; display: flex; align-items: center; gap: 8px; justify-content: center; }
         p { font-size: 15px; margin: 0 0 28px; line-height: 1.6; }
         .btn {
             background: #24292e; color: #fff; padding: 16px 0;
             border-radius: 50px; font-weight: 700; font-size: 16px;
             text-decoration: none; display: block; width: 100%;
+            margin-bottom: 10px;
         }
-        .tel { background: #0088cc; margin-top: 10px; }
+        .tel { background: #0088cc; }
+        .milktank { background: #4caf50; } /* 밀크탱크 이동 버튼 색상 */
+        
+        /* 타임라인 스타일 */
+        .timeline-box { text-align: left; }
+        .notice-item { border-left: 2px solid #dc143c; padding-left: 15px; margin-bottom: 20px; }
+        .notice-item:last-child { margin-bottom: 0; }
+        .time { font-size: 12px; font-weight: bold; color: #888; margin-bottom: 4px; }
+        .content { font-size: 14px; line-height: 1.6; color: #333; word-break: keep-all; }
     </style>
 </head>
-<div class="box" style="margin-top: 20px; max-width: 340px; text-align: left; padding: 25px 24px;">
-    <h2 style="font-size: 17px; margin: 0 0 20px 0; color: #333; display: flex; align-items: center; gap: 8px;">
-        <span style="color: #dc143c;">●</span> 실시간 복구 상황
-    </h2>
+<body>
 
-    <div id="timeline" style="display: flex; flex-direction: column; gap: 20px;">
-
-        <div class="notice-item" style="border-left: 2px solid #dc143c; padding-left: 15px;">
-            <div style="font-size: 12px; font-weight: bold; color: #888; margin-bottom: 4px;">
-                2026-02-24 10:30 </div>
-            <div style="font-size: 14px; line-height: 1.5; color: #333;">
-                현재 네임서버 전파가 완료되었습니다. <br>
-                일부 지역에서 접속이 원활하지 않을 수 있으니 <br>
-                조금만 더 기다려 주시기 바랍니다. </div>
-        </div>
-        <div class="notice-item" style="border-left: 2px solid #ddd; padding-left: 15px;">
-            <div style="font-size: 12px; font-weight: bold; color: #888; margin-bottom: 4px;">
-                2026-02-24 10:00
-            </div>
-            <div style="font-size: 14px; line-height: 1.5; color: #333;">
-                시스템 장애를 감지하여 대피소를 가동했습니다. <br>
-                복구 작업을 시작합니다.
-            </div>
-        </div>
-
+    <div class="box">
+        <h1>현재 접속자가 많습니다</h1>
+        <p>
+            일시적인 인프라 장애로 인해<br>
+            순차적으로 접속을 허용하고 있습니다.<br>
+            잠시 후 다시 시도해 주세요.
+        </p>
+        <a href="https://red52.kr" class="btn">다시 접속 시도하기</a>
+        <a href="https://milktank.kr" class="btn milktank">정상 작동 중인 밀크탱크 이동</a>
+        <a href="https://t.me/your_telegram" class="btn tel">실시간 텔레그램 공지</a>
     </div>
-</div>
-    
-    
+
+    <div class="box timeline-box">
+        <h2><span style="color: #dc143c;">●</span> 실시간 복구 상황</h2>
+        
+        <div id="timeline">
+            <div class="notice-item">
+                <div class="time">2026-02-24 10:30</div>
+                <div class="content">
+                    현재 클라우드플레어 장애로 인하여 빨간오이(red52.kr) 접속이 원활하지 않습니다.<br>
+                    복구가 완료되는 대로 즉시 공지하겠습니다.<br>
+                    정상 작동 중인 <b>밀크탱크(milktank.kr)</b>를 이용해 주세요.
+                </div>
+            </div>
+
+            </div>
+    </div>
+
 </body>
 </html>
