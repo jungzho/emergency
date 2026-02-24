@@ -25,41 +25,31 @@
         .tel { background: #0088cc; margin-top: 10px; }
     </style>
 </head>
-<body>
-    <div class="box">
-        <h1>현재 접속자가 많습니다</h1>
-        <p>
-            일시적인 인프라 장애로 인해<br>
-            순차적으로 접속을 허용하고 있습니다.<br>
-            잠시 후 다시 시도해 주세요.
-        </p>
-        <a href="https://red52.kr" class="btn">다시 접속 시도하기</a>
-        <a href="https://t.me/your_telegram" class="btn tel">실시간 상황 확인 (텔레그램)</a>
-    </div>
-    
-<div class="box" style="margin-top: 20px; max-width: 360px; border: 1px solid #333;">
-    <h2 style="font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" style="fill: #000;">
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
-        </svg>
-        실시간 SNS 소식
+<div class="box" style="margin-top: 20px; max-width: 340px; text-align: left; padding: 25px 24px;">
+    <h2 style="font-size: 17px; margin: 0 0 20px 0; color: #333; display: flex; align-items: center; gap: 8px;">
+        <span style="color: #dc143c;">●</span> 실시간 복구 상황
     </h2>
-    
-    <div style="min-height: 200px; max-height: 400px; overflow-y: auto; background: #000; border-radius: 12px; position: relative;">
-        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 13px; text-align: center; width: 100%; z-index: 1;">
-            X 로그인이 필요할 수 있습니다.<br>
-            <a href="https://x.com/search?q=%23CloudflareDown&f=live" target="_blank" style="color: #1d9bf0; text-decoration: underline; display: inline-block; margin-top: 10px;">여기서 실시간 확인</a>
+
+    <div id="timeline" style="display: flex; flex-direction: column; gap: 20px;">
+
+        <div class="notice-item" style="border-left: 2px solid #dc143c; padding-left: 15px;">
+            <div style="font-size: 12px; font-weight: bold; color: #888; margin-bottom: 4px;">
+                2026-02-24 10:30 </div>
+            <div style="font-size: 14px; line-height: 1.5; color: #333;">
+                현재 네임서버 전파가 완료되었습니다. <br>
+                일부 지역에서 접속이 원활하지 않을 수 있으니 <br>
+                조금만 더 기다려 주시기 바랍니다. </div>
+        </div>
+        <div class="notice-item" style="border-left: 2px solid #ddd; padding-left: 15px;">
+            <div style="font-size: 12px; font-weight: bold; color: #888; margin-bottom: 4px;">
+                2026-02-24 10:00
+            </div>
+            <div style="font-size: 14px; line-height: 1.5; color: #333;">
+                시스템 장애를 감지하여 대피소를 가동했습니다. <br>
+                복구 작업을 시작합니다.
+            </div>
         </div>
 
-        <div style="position: relative; z-index: 2;">
-            <a class="twitter-timeline" 
-               data-height="400" 
-               data-theme="dark" 
-               href="https://x.com/search?q=%23CloudflareDown" 
-               data-chrome="noheader nofooter noborders transparent">
-            </a> 
-        </div>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     </div>
 </div>
     
