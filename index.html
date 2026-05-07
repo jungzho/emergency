@@ -3,70 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>red52.kr</title>
+    <title>긴급 공지 - red52.kr</title>
     <style>
         body {
             font-family: -apple-system, system-ui, sans-serif;
             display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; margin: 0; background: #f1f1f1; color: #333;
-            padding: 40px 0; /* 상하 여백 추가 */
+            min-height: 100vh; margin: 0; background: #1a1a1a; color: #eee;
+            padding: 40px 0;
         }
         .box {
-            background: #fff; padding: 30px 24px; border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            background: #2a2a2a; padding: 30px 24px; border-radius: 12px;
+            border-top: 6px solid #dc143c; /* 비상 상황을 강조하는 붉은색 상단 테두리 */
+            box-shadow: 0 10px 30px rgba(220, 20, 60, 0.15); /* 은은한 붉은빛 그림자 */
             text-align: center; max-width: 340px; width: 85%;
-            margin-bottom: 20px;
         }
-        h1 { font-size: 20px; margin: 0 0 12px; color: #dc143c; }
-        h2 { font-size: 17px; margin: 0 0 20px 0; color: #333; display: flex; align-items: center; gap: 8px; justify-content: center; }
-        p { font-size: 15px; margin: 0 0 28px; line-height: 1.6; }
+        .warning-icon { 
+            font-size: 36px; margin-bottom: 10px; display: block; 
+        }
+        h1 { 
+            font-size: 22px; margin: 0 0 16px; color: #ff4757; 
+        }
+        p { 
+            font-size: 15px; margin: 0 0 28px; line-height: 1.6; color: #ccc; word-break: keep-all; 
+        }
+        b { 
+            color: #fff; 
+        }
         .btn {
-            background: #24292e; color: #fff; padding: 16px 0;
-            border-radius: 50px; font-weight: 700; font-size: 16px;
+            padding: 16px 0; border-radius: 8px; font-weight: 700; font-size: 16px;
             text-decoration: none; display: block; width: 100%;
-            margin-bottom: 10px;
+            margin-bottom: 12px; transition: opacity 0.2s;
         }
-        .tel { background: #0088cc; }
-        .milktank { background: #4caf50; } /* 밀크탱크 이동 버튼 색상 */
-        
-        /* 타임라인 스타일 */
-        .timeline-box { text-align: left; }
-        .notice-item { border-left: 2px solid #dc143c; padding-left: 15px; margin-bottom: 20px; }
-        .notice-item:last-child { margin-bottom: 0; }
-        .time { font-size: 12px; font-weight: bold; color: #888; margin-bottom: 4px; }
-        .content { font-size: 14px; line-height: 1.6; color: #333; word-break: keep-all; }
+        .btn:hover { 
+            opacity: 0.9; 
+        }
+        .milktank { 
+            background: #f1278b; color: #fff; /* 요청하신 밀크탱크 버튼 색상 */
+        } 
+        .btn-retry { 
+            background: transparent; color: #aaa; border: 1px solid #555; 
+        }
     </style>
 </head>
 <body>
 
     <div class="box">
-        <h1>접속 제한 중...</h1>
+        <span class="warning-icon">⚠️</span>
+        <h1>긴급: 접속 제한 중</h1>
         <p>
-            현재 클라우드플레어 장애로 인하여 빨간오이(red52.kr) 접속이 원활하지 않습니다.<br>
-                    복구가 완료되면 즉시 공지하고 사이트 접속 제한을 해제하겠습니다.<br>
-                    정상 작동 중인 <b>밀크탱크(milktank.kr)</b>를 잠시 이용하시길 권장합니다.<br>
-            *빨간오이(red52.kr)는 글로벌 네트워크 보안 시스템 클라우드플레어를 이용하고 있습니다.
+            현재 클라우드플레어 장애로 인하여<br>빨간오이(red52.kr) 접속이 원활하지 않습니다.<br><br>
+            복구가 완료되면 즉시 공지하고<br>사이트 접속 제한을 해제하겠습니다.<br><br>
+            정상 작동 중인 <b>밀크탱크(milktank.kr)</b>를<br>잠시 이용하시길 권장합니다.
         </p>
-        <a href="https://red52.kr" class="btn">접속 시도</a>
-        <a href="https://milktank.kr" class="btn milktank">밀크탱크(milktank.kr)</a>
-        <!-- <a href="https://t.me/your_telegram" class="btn tel">실시간 텔레그램 공지</a> -->
-    </div>
-
-    <!-- <div class="box timeline-box">
-        <h2><span style="color: #dc143c;">●</span> 실시간 상황</h2>
         
-        <div id="timeline">
-            <div class="notice-item">
-                <div class="time">2026-02-24 10:30</div>
-                <div class="content">
-                    현재 클라우드플레어 장애로 인하여 빨간오이(red52.kr) 접속이 원활하지 않습니다.<br>
-                    복구가 완료되는 대로 즉시 공지하겠습니다.<br>
-                    정상 작동 중인 <b>밀크탱크(milktank.kr)</b>를 이용해 주세요.
-                </div>
-            </div>
-
-            </div>
-    </div> -->
+        <!-- 정상 작동하는 대체 사이트를 위로 배치하여 유도 -->
+        <a href="https://milktank.kr" class="btn milktank">밀크탱크(milktank.kr) 이동</a>
+        <a href="https://red52.kr" class="btn btn-retry">접속 재시도</a>
+    </div>
 
 </body>
 </html>
