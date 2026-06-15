@@ -5,8 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>root@red52:~# system_error</title>
     <style>
-        body { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #000; color: #ccc; padding: 20px; font-family: 'Courier New', Consolas, monospace; }
-        .box { background: #000; padding: 35px 25px 25px; border: 2px solid #dc143c; text-align: left; max-width: 450px; width: 100%; box-sizing: border-box; position: relative; }
+body {
+    /* flex 관련 속성 제거 */
+    display: block; 
+    margin: 0;
+    background: #000;
+    color: #ccc;
+    padding: 20px;
+    font-family: 'Courier New', Consolas, monospace;
+    
+    /* 상단 여백 조절 (예: 50px) */
+    padding-top: 50px;
+}
+
+.box {
+    background: #000;
+    padding: 35px 25px 25px;
+    border: 2px solid #dc143c;
+    text-align: left;
+    max-width: 450px;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    
+    /* 화면 중앙 정렬을 유지하고 싶다면 margin: auto 사용 */
+    margin: 0 auto; 
+}
         .box::before { content: " root@red52:~# system_error "; position: absolute; top: -11px; left: 20px; background: #000; color: #dc143c; padding: 0 10px; font-size: 14px; font-weight: bold; }
         h1 { font-size: 18px; margin: 0 0 20px; color: #dc143c; text-transform: uppercase; font-weight: normal; }
         h1::after { content: " █"; animation: blink 1s step-end infinite; }
