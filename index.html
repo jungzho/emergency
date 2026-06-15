@@ -5,44 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>root@red52:~# system_error</title>
     <style>
-body {
-    /* flex 관련 속성 제거 */
-    display: block; 
-    margin: 0;
-    background: #000;
-    color: #ccc;
-    padding: 20px;
-    font-family: 'Courier New', Consolas, monospace;
-    
-    /* 상단 여백 조절 (예: 50px) */
-    padding-top: 50px;
-}
+        body {
+            margin: 0;
+            padding: 50px 20px 20px;
+            background: #000;
+            color: #ccc;
+            font-family: 'Courier New', Consolas, monospace;
+        }
 
-.box {
-    background: #000;
-    padding: 35px 25px 25px;
-    border: 2px solid #dc143c;
-    text-align: left;
-    max-width: 450px;
-    width: 100%;
-    box-sizing: border-box;
-    position: relative;
-    
-    /* 화면 중앙 정렬을 유지하고 싶다면 margin: auto 사용 */
-    margin: 0 auto; 
-}
-        .box::before { content: " root@red52:~# system_error "; position: absolute; top: -11px; left: 20px; background: #000; color: #dc143c; padding: 0 10px; font-size: 14px; font-weight: bold; }
-        h1 { font-size: 18px; margin: 0 0 20px; color: #dc143c; text-transform: uppercase; font-weight: normal; }
-        h1::after { content: " █"; animation: blink 1s step-end infinite; }
+        .box {
+            position: relative;
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 35px 25px 25px;
+            border: 2px solid #dc143c;
+            box-sizing: border-box;
+        }
+
+        .box::before {
+            content: " root@red52:~# system_error ";
+            position: absolute;
+            top: -11px;
+            left: 20px;
+            padding: 0 10px;
+            background: #000;
+            color: #dc143c;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        h1 {
+            margin: 0 0 20px;
+            color: #dc143c;
+            font-size: 18px;
+            font-weight: normal;
+            text-transform: uppercase;
+        }
+
+        h1::after {
+            content: " █";
+            animation: blink 1s step-end infinite;
+        }
+
         @keyframes blink { 50% { opacity: 0; } }
-        p { font-size: 14px; margin: 0 0 35px; line-height: 1.6; color: #aaa; word-break: keep-all; }
-        b { color: #dc143c; font-weight: bold; }
-        .btn { padding: 12px 16px; font-size: 14px; font-weight: bold; text-decoration: none; display: block; width: 100%; box-sizing: border-box; margin-bottom: 10px; cursor: pointer; }
-        .btn::before { content: "# "; margin-right: 8px; font-weight: normal; }
-        .milktank { background: transparent; color: #dc143c; border: 1px solid #dc143c; }
-        .milktank:hover, .milktank:focus { background: #dc143c; color: #000; }
-        .btn-retry { background: transparent; color: #777; border: 1px dashed #555; }
-        .btn-retry:hover, .btn-retry:focus { background: #555; color: #000; border-style: solid; }
+
+        p {
+            margin: 0 0 35px;
+            color: #aaa;
+            font-size: 14px;
+            line-height: 1.6;
+            word-break: keep-all;
+        }
+
+        b { color: #dc143c; }
+
+        .btn {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 12px 16px;
+            box-sizing: border-box;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn::before {
+            content: "# ";
+            margin-right: 8px;
+            font-weight: normal;
+        }
+
+        .milktank {
+            color: #dc143c;
+            border: 1px solid #dc143c;
+        }
+
+        .milktank:hover {
+            background: #dc143c;
+            color: #000;
+        }
+
+        .btn-retry {
+            color: #777;
+            border: 1px dashed #555;
+        }
+
+        .btn-retry:hover {
+            background: #555;
+            color: #000;
+            border-style: solid;
+        }
     </style>
 </head>
 <body>
