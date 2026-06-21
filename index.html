@@ -9,7 +9,7 @@
             margin: 0;
             padding: 50px 20px 20px;
             background: #000;
-            color: #ccc;
+            color: #fff;
             font-family: 'Courier New', Consolas, monospace;
         }
 
@@ -18,7 +18,7 @@
             max-width: 450px;
             margin: 0 auto;
             padding: 35px 25px 25px;
-            border: 2px solid #999;
+            border: 2px solid #666;
             box-sizing: border-box;
         }
 
@@ -29,14 +29,14 @@
             left: 20px;
             padding: 0 10px;
             background: #000;
-            color: #999;
+            color: #666;
             font-size: 14px;
             font-weight: bold;
         }
 
         h1 {
             margin: 0 0 20px;
-            color: #ccc;
+            color: #999;
             font-size: 18px;
             font-weight: normal;
             text-transform: uppercase;
@@ -51,7 +51,7 @@
 
         p {
             margin: 0 0 35px;
-            color: #999;
+            color: #666;
             font-size: 14px;
             line-height: 1.6;
             word-break: keep-all;
@@ -144,7 +144,8 @@
             };
             btn.insertBefore(img, btnText);
 
-            const minWaitTime = new Promise(resolve => setTimeout(resolve, 1500));
+            const randomDelay = Math.floor(Math.random() * 501) + 1000;
+            const minWaitTime = new Promise(resolve => setTimeout(resolve, randomDelay));
 
             let successCount = 0;
 
