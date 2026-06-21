@@ -18,25 +18,25 @@
             max-width: 450px;
             margin: 0 auto;
             padding: 35px 25px 25px;
-            border: 2px solid #dc143c;
+            border: 2px solid #ccc;
             box-sizing: border-box;
         }
 
         .box::before {
             content: " root@red52:~# system_error ";
             position: absolute;
-            top: -11px;
+            top: -10px;
             left: 20px;
             padding: 0 10px;
             background: #000;
-            color: #dc143c;
+            color: #ccc;
             font-size: 14px;
             font-weight: bold;
         }
 
         h1 {
             margin: 0 0 20px;
-            color: #dc143c;
+            color: #ccc;
             font-size: 18px;
             font-weight: normal;
             text-transform: uppercase;
@@ -51,13 +51,13 @@
 
         p {
             margin: 0 0 35px;
-            color: #aaa;
+            color: #ccc;
             font-size: 14px;
             line-height: 1.6;
             word-break: keep-all;
         }
 
-        b { color: #dc143c; }
+        b { color: #fff; }
 
         .btn {
             display: flex;
@@ -84,30 +84,29 @@
 
         /* 기본/정상 상태 */
         .milktank {
-            color: #dc143c;
-            border: 1px solid #dc143c;
+            color: #e31279;
+            border: 1px solid #e31279;
         }
 
         .milktank:hover {
-            background: #dc143c;
+            background: #e31279;
             color: #000;
         }
 
         .btn-retry {
-            color: #777;
-            border: 1px dashed #555;
+            color: #dc143c;
+            border: 1px solid #dc143c;
         }
 
         .btn-retry:hover {
-            background: #555;
+            background: #dc143c;
             color: #000;
-            border-style: solid;
         }
 
-        /* 접속 불가(오프라인) 상태 스타일 */
+        /* 접속 불가/불안정(오프라인) 상태 스타일 */
         .btn.offline {
-            color: #444 !important;
-            border: 1px solid #222 !important;
+            color: #333 !important;
+            border: 1px solid #333 !important;
             background: transparent !important;
             cursor: not-allowed;
             pointer-events: none;
@@ -135,45 +134,56 @@
     </div>
 
     <script>
-        async function checkSiteStatusExt(buttonId, healthUrl, faviconUrl, successText, failText) {
+        // 파라미터에 checkCount를 추가 (기본값 1)
+        async function checkSiteStatusExt(buttonId, healthUrl, faviconUrl, successText, failText, checkCount = 1) {
             const btn = document.getElementById(buttonId);
             const btnText = btn.querySelector('.btn-text');
 
             // 1. 파비콘 이미지 삽입 (영역 확보)
             const img = new Image();
             img.className = 'favicon';
-            img.src = faviconUrl + '?t=' + Date.now(); // 캐시 무효화
+            img.src = faviconUrl + '?t=' + Date.now(); 
             
-            // 로딩 실패 시 엑스박스를 숨기고 투명한 공간(16x16)만 유지
             img.onerror = function() {
                 this.style.visibility = 'hidden'; 
             };
             btn.insertBefore(img, btnText);
 
-            // 2. 최소 지연 시간 설정 (1.5초 = 1500ms)
-            // 서버 응답이 아무리 빨라도 유저에게 "확인 중..." 상태를 1.5초간 보여줌
+            // 2. 최소 지연 시간 설정 (1.5초 유지)
             const minWaitTime = new Promise(resolve => setTimeout(resolve, 1500));
 
-            // 3. 서버 상태 체크 (fetch)
-            let isAlive = false;
-            try {
-                const response = await fetch(`${healthUrl}?t=${Date.now()}`, {
-                    method: 'GET',
-                    cache: 'no-store',
-                    mode: 'cors'
-                });
+            // 3. 서버 상태 체크 (지정된 checkCount 만큼 반복)
+            let isAlive = true;
+            for (let i = 0; i < checkCount; i++) {
+                try {
+                    const response = await fetch(`${healthUrl}?t=${Date.now()}`, {
+                        method: 'GET',
+                        cache: 'no-store',
+                        mode: 'cors'
+                    });
 
-                if (response.ok) {
-                    const text = await response.text();
-                    if (text === "ALIVE") {
-                        isAlive = true;
+                    if (response.ok) {
+                        const text = await response.text();
+                        if (text !== "ALIVE") {
+                            isAlive = false;
+                            break; // ALIVE가 아니면 즉시 반복 중단
+                        }
+                    } else {
+                        isAlive = false;
+                        break; // HTTP 에러 발생 시 즉시 반복 중단
                     }
+                } catch (error) {
+                    isAlive = false; // 네트워크 에러 발생 시 즉시 반복 중단
+                    break;
                 }
-            } catch (error) {
-                isAlive = false; // 네트워크 오류, CORS, 502 에러 등
+
+                // 연속 요청으로 인한 서버/방화벽 차단을 막기 위해 체크 사이에 200ms 대기 (마지막 체크 제외)
+                if (i < checkCount - 1 && isAlive) {
+                    await new Promise(r => setTimeout(r, 200));
+                }
             }
 
-            // 4. fetch 작업이 끝났어도 타이머가 끝날 때까지 대기
+            // 4. 모든 작업이 끝났어도 타이머가 끝날 때까지 대기
             await minWaitTime;
 
             // 5. 결과에 따른 UI 변경
@@ -186,7 +196,7 @@
             }
         }
 
-        // 실행 (버튼ID, uptimerobot 경로, 파비콘 경로, 성공텍스트, 실패텍스트)
+        // 밀크탱크: 1번만 체크 (마지막 파라미터 생략 시 기본값 1)
         checkSiteStatusExt(
             'btn-milktank', 
             'https://milktank.kr/uptimerobot.php', 
@@ -195,12 +205,14 @@
             '밀크탱크 접속 (불가)'
         );
         
+        // 빨간오이: 마지막 파라미터로 '3'을 전달하여 3번 체크
         checkSiteStatusExt(
             'btn-red52', 
             'https://red52.kr/uptimerobot.php', 
             'https://red52.kr/favicon.ico', 
             '빨간오이 재시도 (원활)', 
-            '빨간오이 재시도 (불가)'
+            '빨간오이 재시도 (불안정)',
+            3  // <-- 이 부분이 3번 체크를 지시합니다.
         );
     </script>
 </body>
