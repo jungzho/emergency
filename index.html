@@ -138,36 +138,43 @@
     </div>
 
     <script>
-        function checkSiteStatus(buttonId, faviconUrl, successText, failText) {
-            const btn = document.getElementById(buttonId);
-            const btnText = btn.querySelector('.btn-text');
-            
-            // 파비콘 이미지 객체 생성
-            const img = new Image();
-            
-            // 캐시 방지를 위해 랜덤 쿼리스트링 추가
-            img.src = faviconUrl + '?t=' + new Date().getTime();
+        async function checkSiteStatusExt(buttonId, healthUrl, successText, failText) {
+    const btn = document.getElementById(buttonId);
+    const btnText = btn.querySelector('.btn-text');
 
-            // 이미지 로딩 성공 = 서버 살아있음
-            img.onload = function() {
-                // 파비콘 노출을 위해 버튼 맨 앞에 추가
-                img.className = 'favicon';
-                btn.insertBefore(img, btnText);
+    try {
+        // 캐시 무효화를 위해 타임스탬프 추가
+        const response = await fetch(`${healthUrl}?t=${new Date().getTime()}`, {
+            method: 'GET',
+            cache: 'no-store', // 브라우저 캐시 완전 무시
+            mode: 'cors'       // CORS 모드로 요청
+        });
+
+        // HTTP 상태 코드가 200번대인지 확인
+        if (response.ok) {
+            // PHP가 텍스트를 뱉으므로 json() 대신 text() 사용
+            const text = await response.text(); 
+            
+            // 반환된 텍스트가 정확히 "ALIVE"인지 검증
+            if (text === "ALIVE") {
+                // 정상 작동 처리
                 btnText.textContent = successText;
-            };
-
-            // 이미지 로딩 실패 = 서버 죽었거나 접속 불가
-            img.onerror = function() {
-                // 기본 X 아이콘이나 폰트 등으로 대체 가능, 여기서는 생략하고 텍스트 변경
-                btnText.textContent = failText;
-                btn.classList.add('offline'); // 비활성화 스타일 적용
-            };
+                btn.classList.remove('offline');
+                return;
+            }
         }
+        throw new Error('Server is not ALIVE');
 
-        // 페이지 로드 시 상태 체크 실행
-        // 각 사이트의 실제 파비콘 경로를 적어줍니다. (경로가 다르면 /favicon.ico 대신 실제 경로 입력)
-        checkSiteStatus('btn-milktank', 'https://milktank.kr/favicon.ico', '밀크탱크 접속 (원활)', '밀크탱크 접속 (불가)');
-        checkSiteStatus('btn-red52', 'https://red52.kr/favicon.ico', '빨간오이 재시도 (원활)', '빨간오이 재시도 (불가)');
+    } catch (error) {
+        // 네트워크 오류, 서버 다운, CORS 거부 등 모든 에러 상황
+        btnText.textContent = failText;
+        btn.classList.add('offline');
+    }
+}
+
+// 업로드하신 스크립트 경로에 맞게 함수 호출
+checkSiteStatusExt('btn-milktank', 'https://milktank.kr/uptimerobot.php', '밀크탱크 접속 (원활)', '밀크탱크 접속 (불가)');
+checkSiteStatusExt('btn-red52', 'https://red52.kr/uptimerobot.php', '빨간오이 재시도 (원활)', '빨간오이 재시도 (불가)');
     </script>
 </body>
 </html>
