@@ -60,7 +60,7 @@
         b { color: #dc143c; }
 
         .btn {
-            display: flex; /* 파비콘 정렬을 위해 flex로 변경 */
+            display: flex;
             align-items: center;
             width: 100%;
             margin-bottom: 10px;
@@ -72,18 +72,14 @@
             cursor: pointer;
         }
 
-        .btn::before {
-            content: "# ";
-            margin-right: 8px;
-            font-weight: normal;
-        }
-
-        /* 파비콘 스타일 */
+        /* 파비콘 고정 영역 (로딩 실패해도 공간 유지) */
         .favicon {
             width: 16px;
             height: 16px;
             margin-right: 8px;
-            display: inline-block;
+            display: block;
+            flex-shrink: 0;
+            object-fit: contain;
         }
 
         /* 기본/정상 상태 */
@@ -114,10 +110,11 @@
             border: 1px solid #222 !important;
             background: transparent !important;
             cursor: not-allowed;
-            pointer-events: none; /* 클릭 방지 */
+            pointer-events: none;
         }
+        
         .btn.offline .favicon {
-            filter: grayscale(100%) opacity(30%); /* 파비콘 흑백 처리 */
+            filter: grayscale(100%) opacity(30%);
         }
     </style>
 </head>
@@ -138,43 +135,73 @@
     </div>
 
     <script>
-        async function checkSiteStatusExt(buttonId, healthUrl, successText, failText) {
-    const btn = document.getElementById(buttonId);
-    const btnText = btn.querySelector('.btn-text');
+        async function checkSiteStatusExt(buttonId, healthUrl, faviconUrl, successText, failText) {
+            const btn = document.getElementById(buttonId);
+            const btnText = btn.querySelector('.btn-text');
 
-    try {
-        // 캐시 무효화를 위해 타임스탬프 추가
-        const response = await fetch(`${healthUrl}?t=${new Date().getTime()}`, {
-            method: 'GET',
-            cache: 'no-store', // 브라우저 캐시 완전 무시
-            mode: 'cors'       // CORS 모드로 요청
-        });
-
-        // HTTP 상태 코드가 200번대인지 확인
-        if (response.ok) {
-            // PHP가 텍스트를 뱉으므로 json() 대신 text() 사용
-            const text = await response.text(); 
+            // 1. 파비콘 이미지 삽입 (영역 확보)
+            const img = new Image();
+            img.className = 'favicon';
+            img.src = faviconUrl + '?t=' + Date.now(); // 캐시 무효화
             
-            // 반환된 텍스트가 정확히 "ALIVE"인지 검증
-            if (text === "ALIVE") {
-                // 정상 작동 처리
+            // 로딩 실패 시 엑스박스를 숨기고 투명한 공간(16x16)만 유지
+            img.onerror = function() {
+                this.style.visibility = 'hidden'; 
+            };
+            btn.insertBefore(img, btnText);
+
+            // 2. 최소 지연 시간 설정 (1.5초 = 1500ms)
+            // 서버 응답이 아무리 빨라도 유저에게 "확인 중..." 상태를 1.5초간 보여줌
+            const minWaitTime = new Promise(resolve => setTimeout(resolve, 1500));
+
+            // 3. 서버 상태 체크 (fetch)
+            let isAlive = false;
+            try {
+                const response = await fetch(`${healthUrl}?t=${Date.now()}`, {
+                    method: 'GET',
+                    cache: 'no-store',
+                    mode: 'cors'
+                });
+
+                if (response.ok) {
+                    const text = await response.text();
+                    if (text === "ALIVE") {
+                        isAlive = true;
+                    }
+                }
+            } catch (error) {
+                isAlive = false; // 네트워크 오류, CORS, 502 에러 등
+            }
+
+            // 4. fetch 작업이 끝났어도 타이머가 끝날 때까지 대기
+            await minWaitTime;
+
+            // 5. 결과에 따른 UI 변경
+            if (isAlive) {
                 btnText.textContent = successText;
                 btn.classList.remove('offline');
-                return;
+            } else {
+                btnText.textContent = failText;
+                btn.classList.add('offline');
             }
         }
-        throw new Error('Server is not ALIVE');
 
-    } catch (error) {
-        // 네트워크 오류, 서버 다운, CORS 거부 등 모든 에러 상황
-        btnText.textContent = failText;
-        btn.classList.add('offline');
-    }
-}
-
-// 업로드하신 스크립트 경로에 맞게 함수 호출
-checkSiteStatusExt('btn-milktank', 'https://milktank.kr/uptimerobot.php', '밀크탱크 접속 (원활)', '밀크탱크 접속 (불가)');
-checkSiteStatusExt('btn-red52', 'https://red52.kr/uptimerobot.php', '빨간오이 재시도 (원활)', '빨간오이 재시도 (불가)');
+        // 실행 (버튼ID, uptimerobot 경로, 파비콘 경로, 성공텍스트, 실패텍스트)
+        checkSiteStatusExt(
+            'btn-milktank', 
+            'https://milktank.kr/uptimerobot.php', 
+            'https://milktank.kr/favicon.ico', 
+            '밀크탱크 접속 (원활)', 
+            '밀크탱크 접속 (불가)'
+        );
+        
+        checkSiteStatusExt(
+            'btn-red52', 
+            'https://red52.kr/uptimerobot.php', 
+            'https://red52.kr/favicon.ico', 
+            '빨간오이 재시도 (원활)', 
+            '빨간오이 재시도 (불가)'
+        );
     </script>
 </body>
 </html>
