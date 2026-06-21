@@ -60,7 +60,8 @@
         b { color: #dc143c; }
 
         .btn {
-            display: block;
+            display: flex; /* 파비콘 정렬을 위해 flex로 변경 */
+            align-items: center;
             width: 100%;
             margin-bottom: 10px;
             padding: 12px 16px;
@@ -77,6 +78,15 @@
             font-weight: normal;
         }
 
+        /* 파비콘 스타일 */
+        .favicon {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            display: inline-block;
+        }
+
+        /* 기본/정상 상태 */
         .milktank {
             color: #dc143c;
             border: 1px solid #dc143c;
@@ -97,6 +107,18 @@
             color: #000;
             border-style: solid;
         }
+
+        /* 접속 불가(오프라인) 상태 스타일 */
+        .btn.offline {
+            color: #444 !important;
+            border: 1px solid #222 !important;
+            background: transparent !important;
+            cursor: not-allowed;
+            pointer-events: none; /* 클릭 방지 */
+        }
+        .btn.offline .favicon {
+            filter: grayscale(100%) opacity(30%); /* 파비콘 흑백 처리 */
+        }
     </style>
 </head>
 <body>
@@ -106,8 +128,46 @@
             외부 보안 시스템 장애로 인하여<br>사이트 접속이 원활하지 않습니다.<br><br>
             제휴 사이트 <b>밀크탱크(milktank.kr)</b>를<br>잠시 이용하시길 권장합니다.
         </p>
-        <a href="https://milktank.kr" class="btn milktank">밀크탱크 접속</a>
-        <a href="https://red52.kr/autologin.php?mode=pass" class="btn btn-retry">빨간오이 재시도</a>
+        
+        <a href="https://milktank.kr" id="btn-milktank" class="btn milktank">
+            <span class="btn-text">밀크탱크 접속 (확인 중...)</span>
+        </a>
+        <a href="https://red52.kr/autologin.php?mode=pass" id="btn-red52" class="btn btn-retry">
+            <span class="btn-text">빨간오이 재시도 (확인 중...)</span>
+        </a>
     </div>
+
+    <script>
+        function checkSiteStatus(buttonId, faviconUrl, successText, failText) {
+            const btn = document.getElementById(buttonId);
+            const btnText = btn.querySelector('.btn-text');
+            
+            // 파비콘 이미지 객체 생성
+            const img = new Image();
+            
+            // 캐시 방지를 위해 랜덤 쿼리스트링 추가
+            img.src = faviconUrl + '?t=' + new Date().getTime();
+
+            // 이미지 로딩 성공 = 서버 살아있음
+            img.onload = function() {
+                // 파비콘 노출을 위해 버튼 맨 앞에 추가
+                img.className = 'favicon';
+                btn.insertBefore(img, btnText);
+                btnText.textContent = successText;
+            };
+
+            // 이미지 로딩 실패 = 서버 죽었거나 접속 불가
+            img.onerror = function() {
+                // 기본 X 아이콘이나 폰트 등으로 대체 가능, 여기서는 생략하고 텍스트 변경
+                btnText.textContent = failText;
+                btn.classList.add('offline'); // 비활성화 스타일 적용
+            };
+        }
+
+        // 페이지 로드 시 상태 체크 실행
+        // 각 사이트의 실제 파비콘 경로를 적어줍니다. (경로가 다르면 /favicon.ico 대신 실제 경로 입력)
+        checkSiteStatus('btn-milktank', 'https://milktank.kr/favicon.ico', '밀크탱크 접속 (원활)', '밀크탱크 접속 (불가)');
+        checkSiteStatus('btn-red52', 'https://red52.kr/favicon.ico', '빨간오이 재시도 (원활)', '빨간오이 재시도 (불가)');
+    </script>
 </body>
 </html>
